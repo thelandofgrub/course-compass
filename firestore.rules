@@ -1,0 +1,105 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isMember(groupId) {
+      return signedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid));
+    }
+
+    function isOwner(groupId) {
+      return signedIn() && get(/databases/$(database)/documents/groups/$(groupId)).data.ownerUid == request.auth.uid;
+    }
+
+    function validText(value, maximum) {
+      return value is string && value.size() > 0 && value.size() <= maximum;
+    }
+
+    function validDataId(dataId) {
+      return dataId in [
+        'coursecompass-player-profile',
+        'coursecompass-custom-courses',
+        'coursecompass-club-profile',
+        'coursecompass-club-shot-history',
+        'coursecompass-active-round',
+        'coursecompass-round-history'
+      ];
+    }
+
+    function validPersonalData(dataId) {
+      return validDataId(dataId)
+             && request.resource.data.keys().hasOnly(['key', 'value', 'deviceId', 'playerId', 'changedAt', 'updatedAt'])
+             && request.resource.data.key == dataId
+             && validText(request.resource.data.value, 900000)
+             && validText(request.resource.data.deviceId, 120)
+             && request.resource.data.playerId is string
+             && request.resource.data.playerId.size() <= 120;
+    }
+
+    match /users/{userId} {
+      allow read, delete: if signedIn() && request.auth.uid == userId;
+      allow create, update: if signedIn()
+                            && request.auth.uid == userId
+                            && request.resource.data.keys().hasOnly(['playerId', 'displayName', 'updatedAt'])
+                            && validText(request.resource.data.playerId, 120)
+                            && validText(request.resource.data.displayName, 80);
+
+      match /data/{dataId} {
+        allow read, delete: if signedIn() && request.auth.uid == userId && validDataId(dataId);
+        allow create, update: if signedIn() && request.auth.uid == userId && validPersonalData(dataId);
+      }
+    }
+
+    match /groups/{groupId} {
+      allow create: if signedIn()
+                    && groupId.matches('^[A-Z2-9]{6}$')
+                    && request.resource.data.keys().hasOnly(['name', 'ownerUid', 'joinable', 'lockedThrough', 'createdAt', 'updatedAt'])
+                    && validText(request.resource.data.name, 80)
+                    && request.resource.data.ownerUid == request.auth.uid
+                    && request.resource.data.joinable == true
+                    && request.resource.data.lockedThrough == 0;
+      allow get: if signedIn() && (resource.data.joinable == true || isMember(groupId));
+      allow list: if false;
+      allow update, delete: if isOwner(groupId);
+
+      match /members/{memberId} {
+        allow create: if signedIn()
+                      && request.auth.uid == memberId
+                      && get(/databases/$(database)/documents/groups/$(groupId)).data.joinable == true
+                      && request.resource.data.keys().hasOnly(['uid', 'playerId', 'displayName', 'role', 'deviceId', 'joinedAt', 'updatedAt'])
+                      && request.resource.data.uid == request.auth.uid
+                      && validText(request.resource.data.playerId, 120)
+                      && validText(request.resource.data.displayName, 80)
+                      && request.resource.data.role in ['owner', 'player'];
+        allow read: if isMember(groupId);
+        allow update: if signedIn() && (
+                        (request.auth.uid == memberId
+                         && request.resource.data.uid == request.auth.uid
+                         && validText(request.resource.data.playerId, 120)
+                         && validText(request.resource.data.displayName, 80)
+                         && request.resource.data.role == resource.data.role)
+                        ||
+                        (isOwner(groupId)
+                         && request.auth.uid != memberId
+                         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'updatedAt'])
+                         && request.resource.data.role == 'owner')
+                      );
+        allow delete: if signedIn() && (request.auth.uid == memberId || isOwner(groupId));
+      }
+
+      match /roundStates/{memberId} {
+        allow read: if isMember(groupId);
+        allow delete: if isMember(groupId) && request.auth.uid == memberId;
+        allow create, update: if isMember(groupId)
+                              && request.auth.uid == memberId
+                              && request.resource.data.keys().hasOnly(['playerId', 'displayName', 'activeRound', 'deviceId', 'clientChangedAt', 'updatedAt'])
+                              && validText(request.resource.data.playerId, 120)
+                              && validText(request.resource.data.displayName, 80)
+                              && validText(request.resource.data.activeRound, 900000)
+                              && validText(request.resource.data.deviceId, 120);
+      }
+    }
+  }
+}

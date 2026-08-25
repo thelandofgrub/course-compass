@@ -1,0 +1,54 @@
+name: Monthly Course Data Preview
+
+on:
+  schedule:
+    - cron: '23 7 2 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: coursecompass-course-preview
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Resolve an updated open-data snapshot
+        run: npm run build:course-data
+      - name: Synchronize preview bundles
+        run: |
+          cp data/coursecompass-open-courses.json www/data/coursecompass-open-courses.json
+          cp js/course-data-open.js www/js/course-data-open.js
+          cp legal/data-licenses.html www/legal/data-licenses.html
+          npx cap sync
+      - name: Audit refreshed data and application
+        run: |
+          npm run maintenance:report
+          npm run verify:release
+      - name: Create reviewable source-data diff
+        run: |
+          git diff --check
+          git status --short > release-assets/reports/course-data-preview-status.txt
+          git diff -- data/coursecompass-open-courses.json js/course-data-open.js COURSE_DATA_LICENSE.md ATTRIBUTIONS.md legal/data-licenses.html > release-assets/reports/course-data-preview.patch
+      - name: Upload preview without committing or publishing
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: course-data-preview-${{ github.run_number }}
+          path: |
+            release-assets/reports/
+            data/coursecompass-open-courses.json
+            js/course-data-open.js
+          retention-days: 30
+          if-no-files-found: error
+

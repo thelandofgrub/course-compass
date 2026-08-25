@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+
+# Generated web and report output
+dist/
+release-assets/reports/
+CourseCompass.html
+CourseCompass_Promotional.pdf
+Course Compass Prompts.txt
+
+# Logs and local runtime state
+*.log
+.browser-*.log
+.firebase/
+
+# Environment files and private credentials
+.env
+.env.*
+!.env.example
+service-account*.json
+*-firebase-adminsdk-*.json
+*.pem
+*.p12
+*.jks
+*.keystore
+
+# Android generated and machine-specific files
+android/.gradle/
+android/**/build/
+android/local.properties
+android/.idea/
+android/*.iml
+android/capacitor-cordova-android-plugins/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/res/xml/config.xml
+
+# iOS generated and machine-specific files
+ios/App/build/
+ios/App/Pods/
+ios/App/output/
+ios/App/App/public/
+ios/DerivedData/
+ios/**/xcuserdata/
+ios/capacitor-cordova-ios-plugins/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.tmp

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CourseCompass — Your AI golf coach, virtual caddie, scorecard tracker, and trivia hub. 50+ courses, lessons for every level, and personalized improvement insights.">
+    <meta name="theme-color" content="#0b3026">
+    <title>CourseCompass — Your AI Golf Coach & Caddie</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230b3026'/><path d='M67 29a27 27 0 1 0 0 42' fill='none' stroke='%23d1b277' stroke-width='10' stroke-linecap='round'/><path d='M68 50h18' stroke='%23f8f6ef' stroke-width='8' stroke-linecap='round'/></svg>">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CourseCompass">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Skip to content link for keyboard/screen reader users -->
+    <a href="#mainContent" class="skip-link">Skip to content</a>
+
+    <!-- ======================== SPLASH SCREEN ======================== -->
+    <div id="splash-screen" class="splash">
+        <div class="splash-content">
+            <div class="splash-icon brand-monogram">CC</div>
+            <h1 class="splash-title">CourseCompass</h1>
+            <p class="splash-subtitle">Your AI Golf Coach & Virtual Caddie</p>
+            <div class="splash-loader">
+                <div class="loader-bar"></div>
+            </div>
+            <p class="splash-tip" id="splashTip">Loading your personalized golf experience...</p>
+        </div>
+    </div>
+
+    <!-- ======================== MAIN APPLICATION ======================== -->
+    <div id="app" class="app hidden">
+        <!-- TOP NAV BAR -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <div class="logo">
+                    <span class="logo-icon brand-monogram" aria-hidden="true">CC</span>
+                    <span class="logo-text">CourseCompass</span>
+                </div>
+            </div>
+            <nav class="top-nav" id="topNav">
+                <button class="nav-btn active" data-section="home">
+                    <span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Home</span>
+                </button>
+                <button class="nav-btn" data-section="learn">
+                    <span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Learn</span>
+                </button>
+                <button class="nav-btn" data-section="caddie">
+                    <span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Caddie</span>
+                </button>
+                <button class="nav-btn" data-section="scoring">
+                    <span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Scoring</span>
+                </button>
+                <button class="nav-btn" data-section="leaderboard">
+                    <span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Leaderboard</span>
+                </button>
+                <button class="nav-btn" data-section="trivia">
+                    <span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Trivia</span>
+                </button>
+                <button class="nav-btn" data-section="glossary">
+                    <span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Glossary</span>
+                </button>
+            </nav>
+            <div class="top-bar-right">
+                <button class="field-mode-toggle" id="fieldModeToggle" type="button" title="Cycle field display and power modes" aria-label="Field mode: Standard">Standard</button>
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">Dark</button>
+                <div class="player-badge" id="playerBadge">
+                    <span class="player-avatar" aria-hidden="true">P</span>
+                    <span class="player-name" id="playerName">Golfer</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content" id="mainContent">
+
+            <!-- ==================== HOME SECTION ==================== -->
+            <section id="section-home" class="section active">
+                <div class="hero">
+                    <div class="hero-content">
+                        <span class="hero-kicker">PLAY SMARTER · SCORE WITH CONTEXT</span>
+                        <h1 class="hero-title">Play with <span class="accent">clarity.</span></h1>
+                        <p class="hero-subtitle">Course intelligence, live conditions, personal club data, and round analytics in one focused on-course companion.</p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary btn-lg" onclick="App.navigate('caddie')">Open Caddie</button>
+                            <button class="btn btn-secondary btn-lg" onclick="App.navigate('scoring')">Start a Round</button>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-card-grid">
+                            <button type="button" class="hero-card" onclick="App.navigate('learn')">
+                                <div class="hero-card-icon">01</div>
+                                <h3>Golf Academy</h3>
+                                <p>Master the fundamentals, intermediate techniques, and advanced strategies</p>
+                            </button>
+                            <button type="button" class="hero-card" onclick="App.navigate('caddie')">
+                                <div class="hero-card-icon">02</div>
+                                <h3>Virtual Caddie</h3>
+                                <p>Club selection, distance calc, grass analysis, weather impact</p>
+                            </button>
+                            <button type="button" class="hero-card" onclick="App.navigate('scoring')">
+                                <div class="hero-card-icon">03</div>
+                                <h3>Scorekeeper</h3>
+                                <p>Track scores for multiple players with handicap calculation</p>
+                            </button>
+                            <button type="button" class="hero-card" onclick="App.navigate('leaderboard')">
+                                <div class="hero-card-icon">04</div>
+                                <h3>Leaderboards</h3>
+                                <p>Your live game standings and clearly labeled professional-tour reference data</p>
+                            </button>
+                            <button type="button" class="hero-card" onclick="App.navigate('trivia')">
+                                <div class="hero-card-icon">05</div>
+                                <h3>Trivia & Facts</h3>
+                                <p>Test your knowledge with interactive quizzes and fun facts</p>
+                            </button>
+                            <button type="button" class="hero-card" onclick="App.navigate('glossary')">
+                                <div class="hero-card-icon">06</div>
+                                <h3>Golf Glossary</h3>
+                                <p>Every golf term explained for better understanding</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Daily Tip -->
+                <div class="daily-tip-bar">
+                    <span class="tip-label">DAILY NOTE</span>
+                    <span class="tip-text" id="dailyTip"></span>
+                </div>
+                <!-- Quick Stats -->
+                <div class="home-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="statLessons">42</div>
+                        <div class="stat-label">Lessons Available</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statClubs">14</div>
+                        <div class="stat-label">Clubs Analyzed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statTrivia">125+</div>
+                        <div class="stat-label">Trivia Questions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statGrass">7</div>
+                        <div class="stat-label">Grass Types</div>
+                    </div>
+                </div>
+
+                <div class="data-sync-card" id="dataSyncCard">
+                    <div class="data-sync-heading">
+                        <div>
+                            <h2>Player Data & Sync</h2>
+                            <p>Your data remains on this device until a synchronization provider is connected.</p>
+                        </div>
+                        <span class="sync-status-pill" id="syncStatusPill">Local-only</span>
+                    </div>
+                    <div class="data-sync-grid">
+                        <label class="form-group">
+                            <span class="form-label">Player Profile Name</span>
+                            <input type="text" class="form-input" id="profileNameInput" maxlength="80" autocomplete="name">
+                        </label>
+                        <label class="form-group">
+                            <span class="form-label">Golf Experience</span>
+                            <select class="form-select" id="profileExperienceInput">
+                                <option value="beginner">Beginner — simple, conservative guidance</option>
+                                <option value="developing">Developing — guided recommendations</option>
+                                <option value="advanced">Advanced — deeper shot detail</option>
+                                <option value="competitive">Competitive — full performance detail</option>
+                            </select>
+                            <small id="experienceSummary" class="profile-setting-note"></small>
+                        </label>
+                        <details class="player-development-profile">
+                            <summary>Playing baseline, preferred tee &amp; improvement goal</summary>
+                            <div class="player-development-grid">
+                                <label>Driver carry <span id="profileDistanceUnitLabel">yards</span><input class="form-input" id="profileDriverCarry" type="number" min="80" max="350" placeholder="Optional"></label>
+                                <label>Driver swing speed (mph)<input class="form-input" id="profileSwingSpeed" type="number" min="40" max="140" placeholder="Optional"></label>
+                                <label>Handicap range<select class="form-select" id="profileHandicapRange"><option value="new">New / not established</option><option value="36-plus">36+</option><option value="20-35">20–35</option><option value="10-19">10–19</option><option value="5-9">5–9</option><option value="0-4">0–4</option></select></label>
+                                <label>Handedness<select class="form-select" id="profileHandedness"><option value="right">Right-handed</option><option value="left">Left-handed</option></select></label>
+                                <label>Preferred tee position<select class="form-select" id="profilePreferredTee"><option value="auto">Recommend from my carry</option><option value="forward">Forward</option><option value="middle">Middle</option><option value="back">Back</option><option value="championship">Championship / longest</option></select></label>
+                                <label>Distance units<select class="form-select" id="profileDistanceUnit"><option value="yards">Yards</option><option value="meters">Meters</option></select></label>
+                                <label class="development-goal-field">Primary improvement goal<select class="form-select" id="profileImprovementGoal"><option value="break-100">Break 100</option><option value="break-90">Break 90</option><option value="break-80">Break 80</option><option value="reduce-penalties">Reduce penalties</option><option value="putting">Improve putting</option><option value="approach">Improve approach play</option><option value="consistency">Build consistency</option><option value="competition">Prepare for competition</option></select></label>
+                            </div>
+                            <p>Measured My Bag distances and learned shots always override baseline estimates.</p>
+                        </details>
+                        <div class="identity-summary">
+                            <span><strong>Player ID</strong><code id="profileIdValue">—</code></span>
+                            <span><strong>Device ID</strong><code id="deviceIdValue">—</code></span>
+                            <span><strong>Pending sync changes</strong><code id="outboxCountValue">0</code></span>
+                        </div>
+                    </div>
+                    <details class="accessibility-profile">
+                        <summary>Accessibility &amp; display</summary>
+                        <div class="accessibility-grid">
+                            <label>Text size<select class="form-select" id="accessibilityTextSize"><option value="standard">Standard</option><option value="large">Large</option><option value="xlarge">Extra large</option></select></label>
+                            <label>Contrast<select class="form-select" id="accessibilityContrast"><option value="standard">Standard</option><option value="high">High contrast</option></select></label>
+                            <label>Motion<select class="form-select" id="accessibilityMotion"><option value="system">Follow device</option><option value="full">Standard motion</option><option value="reduced">Reduced motion</option></select></label>
+                            <label class="accessibility-check"><input type="checkbox" id="accessibilitySimplified"> Simplified layout</label>
+                        </div>
+                        <p>Simplified layout reduces secondary descriptions while retaining every primary control.</p>
+                    </details>
+                    <div class="data-sync-actions">
+                        <button class="btn btn-primary" type="button" onclick="App.savePlayerProfile()">Save Profile</button>
+                        <button class="btn btn-secondary" type="button" onclick="App.exportBackup()">Export Backup</button>
+                        <button class="btn btn-secondary" type="button" onclick="App.chooseBackup('merge')">Import & Merge</button>
+                        <button class="btn btn-danger" type="button" onclick="App.chooseBackup('replace')">Replace from Backup</button>
+                        <button class="btn btn-secondary" type="button" onclick="App.showPrivacyCenter()">Privacy & Location</button>
+                        <button class="btn btn-danger" type="button" onclick="App.deleteLocalData()">Delete Local Data</button>
+                        <input class="hidden" type="file" id="backupFileInput" accept="application/json,.json">
+                    </div>
+                    <p class="data-sync-note">Backups include profiles, rounds, shots, club data, and custom courses. Device identity and the pending transport queue are never copied.</p>
+                    <div id="accountSyncPanel" class="account-sync-mount"></div>
+                    <div id="dataSyncMessage" class="text-sm" aria-live="polite"></div>
+                </div>
+            </section>
+
+            <!-- ==================== LEARN SECTION ==================== -->
+            <section id="section-learn" class="section">
+                <div class="section-header">
+                    <h1>Golf Academy</h1>
+                    <p>From your first grip to tournament-winning strategies — organized by skill level</p>
+                </div>
+                <!-- Skill Level Tabs -->
+                <div class="level-tabs">
+                    <button class="level-tab active" data-level="beginner">Beginner</button>
+                    <button class="level-tab" data-level="intermediate">Intermediate</button>
+                    <button class="level-tab" data-level="advanced">Advanced</button>
+                    <button class="level-tab" data-level="pro">Professional</button>
+                </div>
+                <div class="lessons-container" id="lessonsContainer">
+                    <!-- Lessons will be dynamically injected -->
+                </div>
+            </section>
+
+            <!-- ==================== CADDIE SECTION ==================== -->
+            <section id="section-caddie" class="section">
+                <div class="section-header">
+                    <h1>Virtual Caddie</h1>
+                    <p>Your intelligent on-course advisor for every shot</p>
+                </div>
+                <div class="caddie-tabs">
+                    <button class="caddie-tab active" data-caddie="club-selector">Club Selector</button>
+                    <button class="caddie-tab" data-caddie="distance-calc">Distance</button>
+                    <button class="caddie-tab" data-caddie="grass-analyzer">Lie Analysis</button>
+                    <button class="caddie-tab" data-caddie="weather-advisor">Weather</button>
+                    <button class="caddie-tab" data-caddie="course-strategy">Course Strategy</button>
+                    <button class="caddie-tab" data-caddie="shot-advisor">Shot Advisor</button>
+                </div>
+                <div class="caddie-content" id="caddieContent">
+                    <!-- Caddie tools will be dynamically injected -->
+                </div>
+            </section>
+
+            <!-- ==================== SCORING SECTION ==================== -->
+            <section id="section-scoring" class="section">
+                <div class="section-header">
+                    <h1>Scoring & Performance</h1>
+                    <p>Track your round, understand scoring terms, and calculate your handicap</p>
+                </div>
+                <div class="scoring-tabs">
+                    <button class="scoring-tab active" data-scoring="scorecard">Scorecard</button>
+                    <button class="scoring-tab" data-scoring="on-course">On Course</button>
+                    <button class="scoring-tab" data-scoring="progress">Progress</button>
+                    <button class="scoring-tab" data-scoring="insights">Coaching</button>
+                    <button class="scoring-tab" data-scoring="handicap">Handicap</button>
+                    <button class="scoring-tab" data-scoring="terms">Scoring Terms</button>
+                </div>
+                <div class="scoring-content" id="scoringContent">
+                    <!-- Scoring tools will be dynamically injected -->
+                </div>
+            </section>
+
+            <!-- ==================== LEADERBOARD SECTION ==================== -->
+            <section id="section-leaderboard" class="section">
+                <div class="section-header">
+                    <h1>Leaderboards</h1>
+                    <p>Track your game and follow professional tours</p>
+                </div>
+                <div class="leaderboard-tabs">
+                    <button class="leaderboard-tab active" data-lb="my-game">My Game</button>
+                    <button class="leaderboard-tab" data-lb="pga-tour">PGA Tour</button>
+                    <button class="leaderboard-tab" data-lb="lpga-tour">LPGA Tour</button>
+                    <button class="leaderboard-tab" data-lb="majors">Majors</button>
+                </div>
+                <div class="leaderboard-content" id="leaderboardContent">
+                    <!-- Leaderboard data will be dynamically injected -->
+                </div>
+            </section>
+
+            <!-- ==================== TRIVIA SECTION ==================== -->
+            <section id="section-trivia" class="section">
+                <div class="section-header">
+                    <h1>Golf Knowledge</h1>
+                    <p>Test your golf knowledge and learn amazing facts</p>
+                </div>
+                <div class="trivia-tabs">
+                    <button class="trivia-tab active" data-trivia="quiz">Quiz</button>
+                    <button class="trivia-tab" data-trivia="facts">Facts</button>
+                    <button class="trivia-tab" data-trivia="records">Records</button>
+                </div>
+                <div class="trivia-content" id="triviaContent">
+                    <!-- Trivia content will be dynamically injected -->
+                </div>
+            </section>
+
+            <!-- ==================== GLOSSARY SECTION ==================== -->
+            <section id="section-glossary" class="section">
+                <div class="section-header">
+                    <h1>Golf Glossary</h1>
+                    <p>Every golf term explained for better understanding</p>
+                </div>
+                <div class="glossary-search">
+                    <label for="glossarySearch" class="sr-only">Search golf terms</label>
+                    <input type="text" id="glossarySearch" placeholder="Search golf terms" class="search-input">
+                </div>
+                <div class="glossary-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="A-D">A–D</button>
+                    <button class="filter-btn" data-filter="E-H">E–H</button>
+                    <button class="filter-btn" data-filter="I-L">I–L</button>
+                    <button class="filter-btn" data-filter="M-P">M–P</button>
+                    <button class="filter-btn" data-filter="Q-T">Q–T</button>
+                    <button class="filter-btn" data-filter="U-Z">U–Z</button>
+                </div>
+                <div class="glossary-container" id="glossaryContainer">
+                    <!-- Glossary terms will be dynamically injected -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <p>CourseCompass &copy; 2026 · Course intelligence and performance analytics</p>
+            <nav class="footer-links" aria-label="Legal and support">
+                <a href="legal/privacy.html">Privacy</a>
+                <a href="legal/terms.html">Terms</a>
+                <a href="legal/support.html">Support</a>
+                <a href="legal/delete-account.html">Delete account</a>
+                <a href="legal/data-licenses.html">Course data</a>
+            </nav>
+        </footer>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/vendor/qrcode.js"></script>
+    <script src="js/sync.js"></script>
+    <script src="js/course-data-open.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/ai-policy.js"></script>
+    <script src="js/voice.js"></script>
+    <script src="js/lessons.js"></script>
+    <script src="js/caddie.js"></script>
+    <script src="js/scoring.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/trivia.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js', { scope: './' })
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.warn('SW registration failed:', err));
+      }
+    </script>
+</body>
+</html>

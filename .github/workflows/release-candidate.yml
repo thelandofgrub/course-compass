@@ -1,0 +1,68 @@
+name: Approved Release Candidate Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Human-reviewed release version
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: coursecompass-release-candidate
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Block unresolved owner, legal, license, or release failures
+        run: |
+          npm run maintenance:release
+          npm audit --omit=dev --audit-level=high
+          npm run verify:release
+      - uses: actions/upload-artifact@v7
+        with:
+          name: pre-approval-report-${{ inputs.version }}
+          path: release-assets/reports/
+          retention-days: 30
+          if-no-files-found: error
+
+  package:
+    needs: validate
+    environment: release-approval
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run maintenance:release
+      - run: npm run verify:release
+      - name: Upload approved reviewable web release package
+        uses: actions/upload-artifact@v7
+        with:
+          name: coursecompass-${{ inputs.version }}
+          path: |
+            www/
+            release-assets/reports/
+            BUILD_AND_PUBLISH.md
+            STORE_LISTING.md
+            STORE_PRIVACY_DISCLOSURES.md
+            ATTRIBUTIONS.md
+            THIRD_PARTY_NOTICES.md
+          retention-days: 30
+          if-no-files-found: error

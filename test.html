@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Diagnostic</title></head>
+<body>
+<h1 id="status">Loading scripts...</h1>
+<pre id="log" style="background:#222;color:#0f0;padding:20px;font-size:14px;"></pre>
+<script>
+function log(msg) {
+    document.getElementById('log').textContent += msg + '\n';
+}
+window.onerror = function(msg, url, line, col, error) {
+    log('ERROR: ' + msg + ' at ' + url + ':' + line + ':' + col);
+    return false;
+};
+log('Test page loaded, now loading scripts...');
+</script>
+<script src="js/data.js"></script>
+<script>log('✅ data.js loaded. esc=' + typeof esc + ', GolfData=' + typeof GolfData);</script>
+<script src="js/lessons.js"></script>
+<script>log('✅ lessons.js loaded. Lessons=' + typeof Lessons);</script>
+<script src="js/caddie.js"></script>
+<script>log('✅ caddie.js loaded. Caddie=' + typeof Caddie);</script>
+<script src="js/scoring.js"></script>
+<script>log('✅ scoring.js loaded. Scoring=' + typeof Scoring);</script>
+<script src="js/leaderboard.js"></script>
+<script>log('✅ leaderboard.js loaded. Leaderboard=' + typeof Leaderboard);</script>
+<script src="js/trivia.js"></script>
+<script>log('✅ trivia.js loaded. Trivia=' + typeof Trivia);</script>
+<script src="js/app.js"></script>
+<script>
+log('✅ app.js loaded. App=' + typeof App);
+log('');
+log('All scripts loaded successfully!');
+log('GolfData.courses: ' + (GolfData.courses ? GolfData.courses.length + ' courses' : 'MISSING'));
+log('GolfData.glossary: ' + (GolfData.glossary ? GolfData.glossary.length + ' terms' : 'MISSING'));
+log('GolfData.dailyTips: ' + (GolfData.dailyTips ? GolfData.dailyTips.length + ' tips' : 'MISSING'));
+log('Trivia.questionBank: ' + (Trivia.questionBank ? Trivia.questionBank.length + ' questions' : 'MISSING'));
+log('Trivia.funFacts: ' + (Trivia.funFacts ? Trivia.funFacts.length + ' facts' : 'MISSING'));
+log('GolfData.records: ' + (GolfData.records ? GolfData.records.length + ' records' : 'MISSING'));
+document.getElementById('status').textContent = '✅ All scripts loaded!';
+document.getElementById('status').style.color = 'green';
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0"
+  },
+  "name": "coursecompass",
+  "version": "1.0.0",
+  "description": "AI Golf Coach and Virtual Caddie",
+  "main": "generate-icons.js",
+  "scripts": {
+    "build:pages": "node scripts/build-pages.js",
+    "build:promo": "node generate-pdf.js",
+    "build:store-assets": "node generate-store-assets.js",
+    "build:course-data": "node scripts/resolve-course-provenance.js && node scripts/enrich-open-course-tees.js",
+    "maintenance:report": "node scripts/maintenance-report.js",
+    "maintenance:release": "node scripts/maintenance-report.js --release",
+    "test": "node tests/regression.test.js",
+    "test:e2e": "node tests/e2e-smoke.js",
+    "test:firebase": "node tests/firebase-two-device.js",
+    "test:course-data": "node tests/course-data-audit.js",
+    "test:calibration": "node tests/model-calibration.js",
+    "test:release-static": "node tests/release-static-audit.js",
+    "verify:release": "node tests/release-gate.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.0",
+    "canvas": "^3.2.3",
+    "puppeteer": "^25.8.0",
+    "qrcode-generator": "^2.0.4"
+  }
+}
