@@ -51,6 +51,10 @@ npm run test:firebase
 See `BUILD_AND_PUBLISH.md` and `FIREBASE_SETUP.md` for complete release and
 backend instructions.
 
+Native Android and unsigned iOS Simulator validation can be run manually on
+Codemagic using the root `codemagic.yaml`. See `CODEMAGIC_SETUP.md` for the
+free-tier guardrails and connection steps.
+
 ## Repository structure
 
 - `index.html`, `css/`, `js/`, `assets/`, `icons/`, `data/`, and `legal/` — web app
@@ -59,6 +63,7 @@ backend instructions.
 - `tests/` — regression, calibration, release, Firebase, and browser checks
 - `scripts/` — maintenance, course-data, and Pages build tools
 - `.github/workflows/` — review, maintenance, release, and Pages automation
+- `codemagic.yaml` — manual Android/iOS native validation on Codemagic
 
 ## Firebase and secrets
 
@@ -74,4 +79,3 @@ Application source code is licensed under the ISC License. Course records and
 third-party components retain their respective terms. Review
 `COURSE_DATA_LICENSE.md`, `ATTRIBUTIONS.md`, `THIRD_PARTY_NOTICES.md`, and
 `legal/data-licenses.html` before redistribution.
-

@@ -25,6 +25,10 @@ Serve the project over HTTPS. The service worker and manifest use paths relative
 
 For GitHub Pages, run `npm run build:pages` to create the whitelisted `dist/pages` artifact. The Pages workflow performs this automatically for pushes to `main`; configure the repository's Pages source as **GitHub Actions**.
 
+For cloud-based native validation without local Apple hardware, use the manual
+Codemagic workflow documented in `CODEMAGIC_SETUP.md`. It produces an Android
+debug APK and unsigned iOS Simulator app without release signing or publishing.
+
 ## Android
 
 Requires the Android SDK and JDK supported by the installed Capacitor version.

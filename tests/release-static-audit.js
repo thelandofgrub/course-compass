@@ -13,10 +13,11 @@ const required = [
     'legal/privacy.html', 'legal/terms.html', 'legal/support.html', 'legal/delete-account.html',
     'STORE_LISTING.md', 'STORE_PRIVACY_DISCLOSURES.md', 'ATTRIBUTIONS.md',
     'BETA_TEST_PLAN.md', 'BETA_FEEDBACK_TEMPLATE.md', 'SECURITY.md', 'RELEASE_INFORMATION_REQUIRED.md',
-    'COURSE_DATA_LICENSE.md', 'data/coursecompass-open-courses.json', 'legal/data-licenses.html'
-    , 'AUTOMATED_MAINTENANCE.md', 'scripts/maintenance-report.js', '.github/workflows/maintenance-audit.yml',
+    'COURSE_DATA_LICENSE.md', 'data/coursecompass-open-courses.json', 'legal/data-licenses.html',
+    'AUTOMATED_MAINTENANCE.md', 'scripts/maintenance-report.js', '.github/workflows/maintenance-audit.yml',
     '.github/workflows/course-data-preview.yml', '.github/workflows/release-candidate.yml',
-    '.github/workflows/pages.yml', 'scripts/build-pages.js', 'README.md', 'LICENSE', '.gitignore'
+    '.github/workflows/pages.yml', 'scripts/build-pages.js', 'README.md', 'LICENSE', '.gitignore',
+    'codemagic.yaml', 'CODEMAGIC_SETUP.md'
 ];
 for (const file of required) record(`release artifact exists: ${file}`, fs.existsSync(path.join(root, file)));
 
@@ -50,9 +51,12 @@ record('PWA paths support a GitHub Pages project subpath', manifest.start_url ==
 const maintenanceWorkflow = read('.github/workflows/maintenance-audit.yml');
 const coursePreviewWorkflow = read('.github/workflows/course-data-preview.yml');
 const releaseWorkflow = read('.github/workflows/release-candidate.yml');
+const codemagicWorkflow = read('codemagic.yaml');
 record('scheduled maintenance workflows have read-only repository permission', [maintenanceWorkflow, coursePreviewWorkflow].every(text => /permissions:\s*\n\s*contents:\s*read/.test(text)));
 record('scheduled maintenance never commits or publishes', !/git\s+(?:commit|push)|firebase\s+deploy|npm\s+publish/i.test(`${maintenanceWorkflow}\n${coursePreviewWorkflow}`));
 record('release package is manual and references an approval environment', /workflow_dispatch:/.test(releaseWorkflow) && /environment:\s*release-approval/.test(releaseWorkflow));
+record('Codemagic validation is manual and free-tier bounded', /instance_type:\s*mac_mini_m2/.test(codemagicWorkflow) && /max_build_duration:\s*30/.test(codemagicWorkflow) && !/^\s*triggering:/m.test(codemagicWorkflow));
+record('Codemagic validation does not sign or publish store releases', /CODE_SIGNING_ALLOWED=NO/.test(codemagicWorkflow) && !/^\s*publishing:/m.test(codemagicWorkflow) && !/^\s*(?:android_signing|ios_signing):/m.test(codemagicWorkflow));
 
 const syncPairs = ['index.html', 'manifest.json', 'sw.js', 'css/styles.css', 'js/app.js', 'js/storage.js', 'js/voice.js', 'js/lessons.js', 'js/course-data-open.js', 'js/data.js', 'js/caddie.js', 'js/scoring.js', 'js/sync.js', 'data/coursecompass-open-courses.json', 'legal/data-licenses.html'];
 const mismatches = syncPairs.filter(file => {
