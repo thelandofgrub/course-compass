@@ -29,7 +29,9 @@ workflows:
       - name: Synchronize Capacitor projects
         script: npx cap sync
       - name: Configure Android SDK location
-        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+          chmod +x "$CM_BUILD_DIR/android/gradlew"
       - name: Build Android debug APK
         script: |
           cd android

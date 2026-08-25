@@ -50,6 +50,7 @@ Codemagic—not through GitHub.
   lockfile is unchanged.
 - If Android cannot locate its SDK, confirm Codemagic exports
   `ANDROID_SDK_ROOT`; the workflow writes it to `android/local.properties`.
+- If Gradle reports `Permission denied`, confirm `android/gradlew` retains its
+  executable Git mode. The workflow also restores that permission before use.
 - If Xcode cannot find the scheme, confirm the shared scheme is named `App` in
   `ios/App/App.xcodeproj`.
-
